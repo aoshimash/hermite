@@ -1,0 +1,7 @@
+build
+cmake-build-debug
+.ipynb_checkpoints
+.*
+*.csv
+a.out
+*.o
