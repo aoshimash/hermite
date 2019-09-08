@@ -1,0 +1,30 @@
+name: C++ CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install googletest
+      env:
+        GTEST_VERSION: release-1.8.1
+      run: |
+        cd ${HOME}
+        wget https://github.com/google/googletest/archive/${GTEST_VERSION}.tar.gz
+        tar -zxvf ${GTEST_VERSION}.tar.gz
+        mkdir ${HOME}/googletest-${GTEST_VERSION}/build
+        cd ${HOME}/googletest-${GTEST_VERSION}/build
+        cmake ..
+        make
+        sudo make install
+    - name: Build test code
+      run: |
+        mkdir ${GITHUB_WORKSPACE}/build
+        cd ${GITHUB_WORKSPACE}/build
+        cmake ..
+        make
+    - name: Test
+      run: make test -C ${GITHUB_WORKSPACE}/build
